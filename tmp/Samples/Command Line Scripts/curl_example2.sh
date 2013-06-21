@@ -1,0 +1,1 @@
+curl "https://dictation.nuancemobility.net:443/NMDPAsrCmdServlet/dictation?appId=[INSERT YOUR APP ID]&appKey=[INSERT YOUR 128-BYTE STRING APP KEY]&id=C4461956B60B" -H "Content-Type: audio/x-speex;rate=16000" -H "Accept-Language: ENUS" -H "Transfer-Encoding: chunked" -H "Accept: application/xml" -H "Accept-Topic: Dictation" -k --data-binary @audio_16k16bit.spx  -v

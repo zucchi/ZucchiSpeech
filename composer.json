@@ -1,0 +1,30 @@
+{
+    "name": "zucchi/nuance",
+    "description": "Library to help interaction with Nuance Speech Recognition services",
+    "type": "library",
+    "keywords": [
+        "zucchi",
+        "nuance",
+    ],
+    "homepage": "https://github.com/zucchi/ZucchiNuance",
+    "authors" : [{
+        "name": "Matt Cockayne",
+        "email" : "matt@zucchi.co.uk",
+        "homepage" : "http://devincharge.com/"
+    }],
+    "license": "BSD-3-Clause",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.1",
+        "zendframework/zendframework": "dev-master"
+        
+    },
+    "autoload": {
+        "psr-0": {
+            "ZucchiNuance": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
