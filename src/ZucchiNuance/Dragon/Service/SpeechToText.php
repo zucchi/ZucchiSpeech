@@ -10,6 +10,7 @@
 namespace ZucchiNuance\Dragon\Service;
 
 use Zend\Http\Client as HttpClient;
+use Zend\Http\Client\Adapter\Curl as Curl;
 use Zend\Http\Request as HttpRequest;
 
 /**
@@ -25,7 +26,8 @@ use Zend\Http\Request as HttpRequest;
 class SpeechToText 
 {
 
-    const NUANCE_API = 'https://dictation.nuancemobility.net/NMDPAsrCmdServlet/dictation';
+    const NUANCE_API = "https://sandbox.nmdp.nuancemobility.net/";
+    //const NUANCE_API = 'https://dictation.nuancemobility.net/NMDPAsrCmdServlet/dictation';
 
     protected $httpClient;
 
@@ -37,7 +39,7 @@ class SpeechToText
     protected $languageModel = "Dictation";
     protected $resultsFormat = "application/xml";
 
-    protected $file;
+    protected $fileName;
 
     protected $availableLanguages = array(
         'en_us' => 'US English',
@@ -74,18 +76,28 @@ class SpeechToText
     {
         $this->prepareClient();
 
-        $response = $this->httpClient->setMethod(HttpRequest::METHOD_POST)->send();
 
-        var_dump($response);
+        $response = $this->httpClient
+                         ->setMethod(HttpRequest::METHOD_POST)
+                         ->setRawBody(file_get_contents($this->getFileName()))
+                         ->setOptions(array('sslverifypeer'=> false, 'sslcapath' => '/etc/ssl/cert'))
+                         ->send();
 
-        return (string) $string;
+        echo PHP_EOL . $response->getBody() . PHP_EOL;
+
     }
 
     protected function prepareClient()
     {
-        if (!$this->file) {
+        if (!$this->fileName) {
             throw new Exception('You must define a file to use');
         }
+
+        $adapter = new Curl();
+        $adapter->setCurlOption(CURLOPT_SSL_VERIFYHOST,false);
+        $adapter->setCurlOption(CURLOPT_SSL_VERIFYPEER,false);
+        $adapter->setCurlOption(CURLOPT_CAPATH,'/etc/ssl/certs');
+        $this->httpClient->setAdapter($adapter);
 
         // set headers
         $headers = array(
@@ -94,15 +106,17 @@ class SpeechToText
             'Accept-Language' => $this->getLanguage(),
             'Accept' => $this->getResultsFormat(),
             'Accept-Topic' => $this->getLanguageModel(),
-            'Content-Length' => filesize($this->getFile()),
+            'Content-Length' => filesize($this->getFileName()),
         );
 
         $this->httpClient->setHeaders($headers);
 
+
+
         $this->httpClient->setParameterGet(array(
-            'appId'=>urlencode($this->getAppId()),
-            'appKey'=>urlencode($this->getAppKey()),
-            'id'=>urlencode($this->getDeviceId()),
+            'appId' => $this->getAppId(),
+            'appKey' => $this->getAppKey(),
+            'id' => $this->getDeviceId(),
         ));
 
     }
@@ -117,17 +131,17 @@ class SpeechToText
     /**
      * @param mixed $file
      */
-    public function setFile($file)
+    public function setFileName($fileName)
     {
-        $this->file = $file;
+        $this->fileName = $fileName;
     }
 
     /**
      * @return mixed
      */
-    public function getFile()
+    public function getFileName()
     {
-        return $this->file;
+        return $this->fileName;
     }
 
     /**
@@ -167,6 +181,10 @@ class SpeechToText
      */
     public function setCodec($codec)
     {
+        if (!isset($this->codecs[$codec])) {
+            throw new Exception('You must set a valid codec');
+        }
+
         $this->codec = $codec;
     }
 
