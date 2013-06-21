@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2005-2013 Zucchi Limited (http://zucchi.co.uk)
  * @license   http://zucchi.co.uk/legals/bsd-license New BSD License
  */
-namespace ZucchiNu;ance
+namespace ZucchiNuance;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
@@ -26,8 +26,7 @@ use Zend\Mvc\MvcEvent;
  */
 class Module implements 
     AutoloaderProviderInterface,
-    ConfigProviderInterface,
-    BootstrapListenerInterface
+    ConfigProviderInterface
 {
     
     /**

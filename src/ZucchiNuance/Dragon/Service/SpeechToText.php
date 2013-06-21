@@ -26,8 +26,8 @@ use Zend\Http\Request as HttpRequest;
 class SpeechToText 
 {
 
-    const NUANCE_API = "https://sandbox.nmdp.nuancemobility.net/";
-    //const NUANCE_API = 'https://dictation.nuancemobility.net/NMDPAsrCmdServlet/dictation';
+    //const NUANCE_API = "https://sandbox.nmdp.nuancemobility.net/";
+    const NUANCE_API = 'https://dictation.nuancemobility.net/NMDPAsrCmdServlet/dictation';
 
     protected $httpClient;
 
@@ -35,7 +35,7 @@ class SpeechToText
     protected $appKey = "Insert Your 128-Byte App Key";
     protected $deviceId = "0000";
     protected $language = "en_us";
-    protected $codec = "audio/x-wav;codec=pcm;bit=16;rate=8000";
+    protected $codec = "audio/x-wav;codec=pcm;bit=16;rate=22000";
     protected $languageModel = "Dictation";
     protected $resultsFormat = "application/xml";
 
@@ -80,7 +80,8 @@ class SpeechToText
         $response = $this->httpClient
                          ->setMethod(HttpRequest::METHOD_POST)
                          ->setRawBody(file_get_contents($this->getFileName()))
-                         ->setOptions(array('sslverifypeer'=> false, 'sslcapath' => '/etc/ssl/cert'))
+                         //->setOptions(array('sslverifypeer'=> false, 'sslcapath' => '/etc/ssl/cert'))
+                        ->setOptions(array('sslverifypeer'=> false))
                          ->send();
 
         echo PHP_EOL . $response->getBody() . PHP_EOL;
@@ -96,7 +97,7 @@ class SpeechToText
         $adapter = new Curl();
         $adapter->setCurlOption(CURLOPT_SSL_VERIFYHOST,false);
         $adapter->setCurlOption(CURLOPT_SSL_VERIFYPEER,false);
-        $adapter->setCurlOption(CURLOPT_CAPATH,'/etc/ssl/certs');
+       // $adapter->setCurlOption(CURLOPT_CAPATH,'/etc/ssl/certs');
         $this->httpClient->setAdapter($adapter);
 
         // set headers
@@ -120,13 +121,6 @@ class SpeechToText
         ));
 
     }
-
-
-
-
-
-
-
 
     /**
      * @param mixed $file
