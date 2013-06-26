@@ -7,7 +7,7 @@
  * @license   http://zucchi.co.uk/legals/bsd-license New BSD License
  */
 
-namespace ZucchiNuance\Dragon\Service;
+namespace ZucchiSpeech\Dragon\Service;
 
 use Zend\Http\Client as HttpClient;
 use Zend\Http\Client\Adapter\Curl as Curl;
@@ -26,7 +26,7 @@ use Zend\Http\Request as HttpRequest;
 class SpeechToText 
 {
 
-    //const NUANCE_API = "https://sandbox.nmdp.nuancemobility.net/";
+
     const NUANCE_API = 'https://dictation.nuancemobility.net/NMDPAsrCmdServlet/dictation';
 
     protected $httpClient;
@@ -77,13 +77,13 @@ class SpeechToText
         $this->prepareClient();
 
 
-        $response = $this->httpClient
-                         ->setMethod(HttpRequest::METHOD_POST)
+        $response = $this->httpClient->setMethod(HttpRequest::METHOD_POST)
                          ->setRawBody(file_get_contents($this->getFileName()))
-                         //->setOptions(array('sslverifypeer'=> false, 'sslcapath' => '/etc/ssl/cert'))
-                        ->setOptions(array('sslverifypeer'=> false))
-                         ->send();
+                         ->setOptions(array('sslverifypeer'=> false, 'sslcapath' => '/etc/ssl/cert'));
+                        //->setOptions(array('sslverifypeer'=> false))
 
+        $response = $this->httpClient->send();
+        echo $this->httpClient->getLastRawRequest();
         echo PHP_EOL . $response->getBody() . PHP_EOL;
 
     }
@@ -97,7 +97,7 @@ class SpeechToText
         $adapter = new Curl();
         $adapter->setCurlOption(CURLOPT_SSL_VERIFYHOST,false);
         $adapter->setCurlOption(CURLOPT_SSL_VERIFYPEER,false);
-       // $adapter->setCurlOption(CURLOPT_CAPATH,'/etc/ssl/certs');
+        $adapter->setCurlOption(CURLOPT_CAPATH,'/etc/ssl/certs');
         $this->httpClient->setAdapter($adapter);
 
         // set headers

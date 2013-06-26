@@ -1,12 +1,12 @@
 {
-    "name": "zucchi/nuance",
+    "name": "zucchi/speech",
     "description": "Library to help interaction with Nuance Speech Recognition services",
     "type": "library",
     "keywords": [
         "zucchi",
-        "nuance"
+        "speech"
     ],
-    "homepage": "https://github.com/zucchi/ZucchiNuance",
+    "homepage": "https://github.com/zucchi/ZucchiSpeech",
     "authors" : [{
         "name": "Matt Cockayne",
         "email" : "matt@zucchi.co.uk",
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-0": {
-            "ZucchiNuance": "src/"
+            "ZucchiSpeech": "src/"
         },
         "classmap": [
             "./Module.php"

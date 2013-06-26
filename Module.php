@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2005-2013 Zucchi Limited (http://zucchi.co.uk)
  * @license   http://zucchi.co.uk/legals/bsd-license New BSD License
  */
-namespace ZucchiNuance;
+namespace ZucchiSpeech;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
