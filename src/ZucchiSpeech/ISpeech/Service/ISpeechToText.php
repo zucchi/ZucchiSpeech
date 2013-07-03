@@ -38,7 +38,7 @@ class ISpeechToText
     protected $language = "en-gb";
     protected $action= "recognize";
     protected $codec = "audio/x-wav";
-    protected $freeform = 1;
+    protected $freeform = 3;
     protected $resultsFormat = "json";
     protected $fileName;
 

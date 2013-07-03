@@ -35,7 +35,7 @@ class SpeechToText
     protected $appKey = "Insert Your 128-Byte App Key";
     protected $deviceId = "0000";
     protected $language = "en_us";
-    protected $codec = "audio/x-wav;codec=pcm;bit=16;rate=22000";
+    protected $codec = "audio/x-wav;codec=pcm;bit=16;rate=16000";
     protected $languageModel = "Dictation";
     protected $resultsFormat = "application/xml";
 
@@ -78,13 +78,16 @@ class SpeechToText
 
 
         $response = $this->httpClient->setMethod(HttpRequest::METHOD_POST)
-                         ->setRawBody(file_get_contents($this->getFileName()))
+                         ->setRawBody(File_get_contents($this->getFileName()))
                          ->setOptions(array('sslverifypeer'=> false, 'sslcapath' => '/etc/ssl/cert'));
-                        //->setOptions(array('sslverifypeer'=> false))
+                       // ->setOptions(array('sslverifypeer'=> false));
 
         $response = $this->httpClient->send();
-        echo $this->httpClient->getLastRawRequest();
-        echo PHP_EOL . $response->getBody() . PHP_EOL;
+
+        $voiceResults = explode(":\n",$response->getContent());
+        return $voiceResults[0];
+        //echo $this->httpClient->getLastRawRequest();
+        //echo PHP_EOL . $response->getBody() . PHP_EOL;
 
     }
 
@@ -94,20 +97,17 @@ class SpeechToText
             throw new Exception('You must define a file to use');
         }
 
-        $adapter = new Curl();
-        $adapter->setCurlOption(CURLOPT_SSL_VERIFYHOST,false);
-        $adapter->setCurlOption(CURLOPT_SSL_VERIFYPEER,false);
-        $adapter->setCurlOption(CURLOPT_CAPATH,'/etc/ssl/certs');
-        $this->httpClient->setAdapter($adapter);
 
+        $len = filesize($this->fileName);
         // set headers
         $headers = array(
-            'Content-Type' => $this->codecs[$this->getCodec()]['mime'],
-            'Content-Language' => $this->getLanguage(),
-            'Accept-Language' => $this->getLanguage(),
-            'Accept' => $this->getResultsFormat(),
-            'Accept-Topic' => $this->getLanguageModel(),
-            'Content-Length' => filesize($this->getFileName()),
+            'Content-Type' => $this->codec,
+            'Content-Language' => $this->language,
+            'Accept-Language' => $this->language,
+            'Accept' => $this->resultsFormat,
+            'Accept-Topic' => $this->languageModel,
+            'Content-Length' => $len,
+            //'Transfer-Encoding'=> 'chunked',
         );
 
         $this->httpClient->setHeaders($headers);
