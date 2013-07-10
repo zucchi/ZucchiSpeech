@@ -84,8 +84,9 @@ class SpeechToText
 
         $response = $this->httpClient->send();
 
-        $voiceResults = explode("\n",$response->getContent());
-        return $voiceResults[0];
+        //$voiceResults = explode("\n",$response->getContent());
+        //return $voiceResults[0];
+        return $this->httpClient->getLastRawResponse();
         //echo $this->httpClient->getLastRawRequest();
         //echo PHP_EOL . $response->getBody() . PHP_EOL;
 
