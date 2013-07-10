@@ -101,7 +101,7 @@ class SpeechToText
         $len = filesize($this->fileName);
         // set headers
         $headers = array(
-            'Content-Type' => $this->codec,
+            'Content-Type' => "audio/x-wav;codec=pcm;bit=16;rate=16000",
             'Content-Language' => $this->language,
             'Accept-Language' => $this->language,
             'Accept' => $this->resultsFormat,
